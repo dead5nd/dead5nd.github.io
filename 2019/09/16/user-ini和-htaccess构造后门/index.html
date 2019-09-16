@@ -6,20 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://172.30.61.219:4000">
-  <title>Django | Stay bolg</title>
+  <title>user.ini和.htaccess构造后门 | Stay bolg</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Django安装时处理过的错误">
-<meta name="keywords" content="Python">
+  <meta name="description" content="一般情况下我们做信息搜集的过程中会对站点的路径、文件进行探测搜集，如果碰见了user.inih和.htaccess文件就需要特别留意一下">
+<meta name="keywords" content="渗透">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Django">
-<meta property="og:url" content="http://172.30.61.219:4000/2019/09/11/Django/index.html">
+<meta property="og:title" content="user.ini和.htaccess构造后门">
+<meta property="og:url" content="http://172.30.61.219:4000/2019/09/16/user-ini和-htaccess构造后门/index.html">
 <meta property="og:site_name" content="Stay bolg">
-<meta property="og:description" content="Django安装时处理过的错误">
+<meta property="og:description" content="一般情况下我们做信息搜集的过程中会对站点的路径、文件进行探测搜集，如果碰见了user.inih和.htaccess文件就需要特别留意一下">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-09-11T08:55:57.000Z">
+<meta property="og:updated_time" content="2019-09-16T07:22:46.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Django">
-<meta name="twitter:description" content="Django安装时处理过的错误">
+<meta name="twitter:title" content="user.ini和.htaccess构造后门">
+<meta name="twitter:description" content="一般情况下我们做信息搜集的过程中会对站点的路径、文件进行探测搜集，如果碰见了user.inih和.htaccess文件就需要特别留意一下">
   
     <link rel="alternative" href="/atom.xml" title="Stay bolg" type="application/atom+xml">
   
@@ -159,37 +159,27 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Django" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-user-ini和-htaccess构造后门" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Django
+      user.ini和.htaccess构造后门
     </h1>
   
 
         
-        <a href="/2019/09/11/Django/" class="archive-article-date">
-  	<time datetime="2019-09-11T08:54:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-11</time>
+        <a href="/2019/09/16/user-ini和-htaccess构造后门/" class="archive-article-date">
+  	<time datetime="2019-09-16T07:18:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-16</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Django安装时处理过的错误<a id="more"></a></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">安装nodejs npm</span><br><span class="line">yum search nodejs npm</span><br><span class="line"></span><br><span class="line">yum install nodejs npm</span><br><span class="line"></span><br><span class="line">node -v 低</span><br><span class="line"></span><br><span class="line">npm -v 低</span><br><span class="line"></span><br><span class="line">npm install -g n  失败  npm config set strict-ssl false</span><br><span class="line"></span><br><span class="line">npm install -g n  </span><br><span class="line"></span><br><span class="line">n latest /-h</span><br><span class="line"></span><br><span class="line">ln -s xxxxxx /usr/bin/npm</span><br><span class="line"></span><br><span class="line">ln -s xxx/xxx /usr/bin/node</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">安装高版本python pip</span><br><span class="line">yum search python</span><br><span class="line"></span><br><span class="line">yum install python34</span><br><span class="line"></span><br><span class="line">cd opt</span><br><span class="line"></span><br><span class="line">python3 -m venv py3</span><br><span class="line"></span><br><span class="line">source /opt/py3/bin/activate</span><br><span class="line"></span><br><span class="line">pip3</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">MySQL导入和修改字符编码</span><br><span class="line"></span><br><span class="line">mysql</span><br><span class="line"></span><br><span class="line">mysql -u root -p</span><br><span class="line"></span><br><span class="line">show databases show tables</span><br><span class="line"></span><br><span class="line">slource xx/xx/xx.sql</span><br><span class="line"></span><br><span class="line">show variables like 'character_set_database';</span><br><span class="line"></span><br><span class="line">show create table table_name</span><br><span class="line"></span><br><span class="line">alter database database_name character set utf8</span><br><span class="line"></span><br><span class="line">alter table table_name character set utf8</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Linux操作</span><br><span class="line">rm -rf *</span><br><span class="line"></span><br><span class="line">chmod 777 xx/xx/*</span><br><span class="line"></span><br><span class="line">ls -al xx/xx</span><br><span class="line"></span><br><span class="line">free -h / atop / cat /proc/medinfo</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">Django操作</span><br><span class="line">pip3 install django</span><br><span class="line"></span><br><span class="line">python3</span><br><span class="line">import django</span><br><span class="line">django.VERSION()</span><br><span class="line"></span><br><span class="line">django-admin startproject stay</span><br><span class="line">cd stay</span><br><span class="line">python3 manage.py startapp learn</span><br><span class="line"></span><br><span class="line">数据库操作</span><br><span class="line">python manage.py makemigrations</span><br><span class="line">python manage.py migrate</span><br><span class="line">python manage.py flush //清空数据库</span><br><span class="line"></span><br><span class="line">python manage.py runserver 0.0.0.0:8080</span><br><span class="line">    </span><br><span class="line">python manage.py shell//终端</span><br><span class="line"></span><br><span class="line">python manage.py makemigrations 报错</span><br><span class="line">django.db.utils.ProgrammingError: (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED' at line 1")</span><br><span class="line"></span><br><span class="line">在setting.py--&gt;DATABASES中的最后加上'OPTIONS':&#123;'isolation_level':None&#125;</span><br></pre></td></tr></table></figure>
-
+        <p>一般情况下我们做信息搜集的过程中会对站点的路径、文件进行探测搜集，如果碰见了<code>user.ini</code>h和<code>.htaccess</code>文件就需要特别留意一下</p>
 
       
 
@@ -224,7 +214,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Python</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">渗透</a>
         		</li>
       		
 		</ul>
@@ -280,7 +270,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://172.30.61.219:4000/2019/09/11/Django/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://172.30.61.219:4000/2019/09/16/user-ini和-htaccess构造后门/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -294,18 +284,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/09/11/Python/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Python
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/09/11/Daily/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Daily</div>
+    <a href="/2019/09/12/渗透的思路及使用的工具/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">渗透的思路及使用的工具</div>
       <i class="icon-circle-right"></i>
     </a>
   
